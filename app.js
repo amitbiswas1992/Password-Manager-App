@@ -12,5 +12,10 @@ var accounts = storage.getItemSync('accounts');
 
 //push on a new account
 //save using setItemSync
+accounts.push({
+    username: 'Jen',
+    balance: 75
+});
 
+storage.setItemSync('accounts', accounts);
 console.log(accounts);
