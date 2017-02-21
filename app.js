@@ -1,7 +1,7 @@
 console.log('Starting Password Manager App ');
 
 var storage = require('node-persist');
-storage.initSync();
+storage.initSync(); // create * name , username, password
 
 // // storage.setItemSync('accounts', [{
 // //     username: 'Amit Biswas',
