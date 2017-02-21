@@ -1,10 +1,15 @@
-var argv = require('yargs')
+var argv = require('yargs') //by using yarg seted up the option firstname and alias for itself
     .command('hello', 'Greets the user', function(yargs) {
         yargs.options({
             name: {
                 demand: true,
                 alias: 'n',
                 description: 'Your first name goes here'
+            },
+            lastname: {
+                demand: true,
+                alias: 'l',
+                description: 'Your last name goes here'
             }
         }).help('help');
     })
