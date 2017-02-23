@@ -1,5 +1,5 @@
 console.log('starting password manager');
-
+var crypto = require('crypto-js');
 var storage = require('node-persist');
 storage.initSync();
 
@@ -53,26 +53,42 @@ var command = argv._[0];
 
 // get
 //     --name
+function getAccounts(masterPassword) {
+    //use getItemSync to fetch account
+    var encryptedAccount = storage.getItemSync('accounts');
+    var accounts = [];
 
-// account.name Facebook
-// account.username User12!
-// account.password Password123!
+    //decrypt
+    if (typeof encryptedAccount !== 'undefined') {
+        var bytes = crypto.AES.decrypt(encryptedAccount, masterPassword);
+        var accounts = JSON.parse(bytes.toString(crypto.enc.Utf8));
+    }
+    //return account array
+    return accounts;
+
+}
+
+function saveAccounts(accounts, masterPassword) {
+    var encryptedAccount = crypto.AES.encrypt(JSON.stringify(accounts), masterPassword);
+    storage.setItemSync('accounts', encryptedAccount.toString());
+
+    return accounts;
+}
 
 function createAccount(account, masterPassword) {
-    var accounts = storage.getItemSync('accounts');
-
-    if (typeof accounts === 'undefined') {
-        accounts = [];
-    }
+    var accounts = getAccounts(masterPassword);
 
     accounts.push(account);
-    storage.setItemSync('accounts', accounts);
+
+    saveAccounts(accounts, masterPassword);
 
     return account;
 }
 
-function getAccount(accountName, masterPassword) {
-    var accounts = storage.getItemSync('accounts');
+function getAccount(accountName, masterPassword) { // added masterPassword argument 
+    //var accounts = storage.getItemSync('accounts');
+    var accounts = getAccounts(masterPassword)
+
     var matchedAccount;
 
     accounts.forEach(function(account) {
