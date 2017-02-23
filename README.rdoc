@@ -1,6 +1,18 @@
+                   Welcome to Password -Manager App
+             _____________________________________________
 * This is a simple password manager application using node.js technology. 
 * Here is the first step we installed a package called "node-persist@0.0.6"
 * After that we can set a variable into out app.js file  and using setItemSync and GetItemSync we can storage and pull data from our local storage of our machine .
 * Now  getting input and sorting data from the user 
 * installed  "yargs": "^3.15.0" package into the node_module 
 * Installed "crypto-js" package for securing master password 
+
+* Added try catch method inside app.js folder for better error handaling .
+
+* Now You can create and save your password very securly by using this basic comand line application. 
+
+
+Thank You so much ! 
+
+Amit Biswas 
+contact@amitbiswas.net
