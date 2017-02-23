@@ -1,5 +1,6 @@
 console.log('starting password manager');
-var crypto = require('crypto-js');
+
+var crypto = require('crypto-js')
 var storage = require('node-persist');
 storage.initSync();
 
@@ -27,7 +28,7 @@ var argv = require('yargs')
             masterPassword: {
                 demand: true,
                 alias: 'm',
-                description: 'Master Password',
+                description: 'Master password',
                 type: 'string'
             }
         }).help('help');
@@ -38,6 +39,12 @@ var argv = require('yargs')
                 demand: true,
                 alias: 'n',
                 description: 'Account name (eg: Twitter, Facebook)',
+                type: 'string'
+            },
+            masterPassword: {
+                demand: true,
+                alias: 'm',
+                description: 'Master password',
                 type: 'string'
             }
         }).help('help');
@@ -53,25 +60,34 @@ var command = argv._[0];
 
 // get
 //     --name
+
+// account.name Facebook
+// account.username User12!
+// account.password Password123!
+
 function getAccounts(masterPassword) {
-    //use getItemSync to fetch account
+    // use getItemSync to fetch accounts
     var encryptedAccount = storage.getItemSync('accounts');
     var accounts = [];
 
-    //decrypt
+    // decrypt
     if (typeof encryptedAccount !== 'undefined') {
         var bytes = crypto.AES.decrypt(encryptedAccount, masterPassword);
-        var accounts = JSON.parse(bytes.toString(crypto.enc.Utf8));
+        accounts = JSON.parse(bytes.toString(crypto.enc.Utf8));
     }
-    //return account array
-    return accounts;
 
+    // return accounts array
+    return accounts;
 }
 
 function saveAccounts(accounts, masterPassword) {
-    var encryptedAccount = crypto.AES.encrypt(JSON.stringify(accounts), masterPassword);
-    storage.setItemSync('accounts', encryptedAccount.toString());
+    // encrypt accounts
+    var encryptedAccounts = crypto.AES.encrypt(JSON.stringify(accounts), masterPassword);
 
+    // setItemSync
+    storage.setItemSync('accounts', encryptedAccounts.toString());
+
+    // return accounts
     return accounts;
 }
 
@@ -80,15 +96,13 @@ function createAccount(account, masterPassword) {
 
     accounts.push(account);
 
-    saveAccounts(accounts, masterPassword);
+    saveAccounts(accounts, masterPassword) //<<<
 
     return account;
 }
 
-function getAccount(accountName, masterPassword) { // added masterPassword argument 
-    //var accounts = storage.getItemSync('accounts');
+function getAccount(accountName, masterPassword) {
     var accounts = getAccounts(masterPassword)
-
     var matchedAccount;
 
     accounts.forEach(function(account) {
